@@ -1,3 +1,8 @@
+CreatedDate: 2025-08-24 23:48:00
+UpdatedDate: 2025-08-24 23:48:00
+Tags: first, go, blog
+Published: true
+---
 # My First Blog Post
 
 This is the content of my first blog post. It's written in markdown format.

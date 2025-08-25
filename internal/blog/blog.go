@@ -9,12 +9,13 @@ import (
 
 // Post represents a blog post
 type Post struct {
-	Title     string
-	Content   string
-	Date      time.Time
-	Slug      string
-	Tags      []string
-	Published bool
+	Title       string    // TODO: Extract from the first # Heading
+	Content     string    // TODO: Extract from the markdown file
+	CreatedDate time.Time // TODO: Use should be free to omit it but then it should be updated in the md file for suture
+	UpdatedDate time.Time // TODO: Use should be free to omit it but then it should be updated in the md file for suture
+	Slug        string    // TODO: Derive from title
+	Tags        []string
+	Published   bool
 }
 
 // Blog represents a collection of blog posts
@@ -54,11 +55,4 @@ func (b *Blog) LoadPosts() error {
 	})
 
 	return err
-}
-
-// CreatePost creates a new blog post
-func (b *Blog) CreatePost(title, content string) error {
-	// Implementation will be added later
-	fmt.Printf("Creating post: %s\n", title)
-	return nil
 }

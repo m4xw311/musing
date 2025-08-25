@@ -10,14 +10,14 @@ import (
 
 // StaticSiteGenerator handles generating static HTML from markdown posts
 type StaticSiteGenerator struct {
-	PostsDir string
+	PostsDir  string
 	OutputDir string
 }
 
 // NewStaticSiteGenerator creates a new static site generator
 func NewStaticSiteGenerator(postsDir, outputDir string) *StaticSiteGenerator {
 	return &StaticSiteGenerator{
-		PostsDir: postsDir,
+		PostsDir:  postsDir,
 		OutputDir: outputDir,
 	}
 }
@@ -29,6 +29,9 @@ func (s *StaticSiteGenerator) Generate() error {
 		return err
 	}
 
+	// TODO: Rather than hard coding here, use a template engine like Go's text/template or html/template
+	// 		 Maintain templates in separate files
+	//       Maintain template for home page, posts page and error page
 	// Create a simple index.html
 	indexContent := `<!DOCTYPE html>
 <html>
@@ -50,6 +53,7 @@ func (s *StaticSiteGenerator) Generate() error {
 	return ioutil.WriteFile(filepath.Join(s.OutputDir, "index.html"), []byte(indexContent), 0644)
 }
 
+// TODO: Use Blog in blog package rather than reading files directly here
 // ProcessPosts processes all markdown posts
 func (s *StaticSiteGenerator) ProcessPosts() error {
 	return filepath.Walk(s.PostsDir, func(path string, info os.FileInfo, err error) error {
