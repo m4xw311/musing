@@ -20,10 +20,10 @@ additional_mcp_servers:
 
 # Allowed OS commands
 allowed_commands:
-  - go build
   - go test *
-  - go fmt *
+  - go fmt ./...
   - go vet *
+  - go mod tidy
 
 # Filesystem access rules
 filesystem_access:
