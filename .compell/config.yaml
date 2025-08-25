@@ -37,3 +37,4 @@ filesystem_access:
     - "go.mod"
     - "REQUIREMENTS.md"
     - "LICENSE"
+    - "OBSERVATIONS.md"
