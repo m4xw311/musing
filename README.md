@@ -2,7 +2,7 @@
 
 A simple tool to publish markdown-based static blogs and sync them to platforms like Substack and Medium.
 
-⚠️ This project is currently in development and not ready for use.
+⚠️ This project is currently in development and not ready for use. Currently using the development of this project to test and improve [compell](https://github.com/m4xw311/compell) coding assistant.
 
 ## Features
 
