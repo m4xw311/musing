@@ -1,3 +1,4 @@
+---
 CreatedDate: 2025-08-24 23:48:00
 UpdatedDate: 2025-08-24 23:48:00
 Tags: first, go, blog

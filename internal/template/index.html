@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+    <head>
+        <title>My Blog</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <header>
+            <h1>My Blog</h1>
+        </header>
+        <main>
+            <h2>Latest Posts</h2>
+            <div class="cards">
+                {{range .LatestPosts}}
+                <a href="{{.Slug}}.html">
+                    <div class="card">
+                        <p>{{.ContentSnippetHTML}}</p>
+                        <p>
+                            <em
+                                >Published: {{.CreatedDate.Format
+                                "2006-01-02"}}</em
+                            >
+                        </p>
+                    </div>
+                </a>
+                {{end}}
+            </div>
+            <h2>All Posts</h2>
+            <ul>
+                {{range .Posts}}
+                <li>
+                    <a href="{{.Slug}}.html">{{.Title}}</a> -
+                    {{.CreatedDate.Format "2006-01-02"}}
+                </li>
+                {{end}}
+            </ul>
+        </main>
+        <footer>
+            <p>&copy; 2023 My Blog</p>
+        </footer>
+    </body>
+</html>

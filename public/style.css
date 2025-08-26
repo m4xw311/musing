@@ -1,0 +1,126 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    color: #fff; /* Ensure the header text is white */
+}
+
+header h1 a {
+    color: #fff; /* Ensure the header link text is white */
+    text-decoration: none;
+}
+
+main {
+    padding: 20px;
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    padding-bottom: 60px; /* Add space to prevent overlap with footer */
+}
+
+.cards {
+    display: block;
+    margin-bottom: 20px;
+}
+
+.card {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 20px; /* Add space between cards */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+.card h3 {
+    margin-top: 0;
+}
+
+.card a {
+    text-decoration: none;
+    color: #333;
+}
+
+/* Remove the hover underline for card links */
+.cards a {
+    text-decoration: none;
+}
+
+.cards a:hover {
+    text-decoration: none;
+}
+
+/* Add shadow and float effect on hover */
+.cards a:hover .card {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* But we'll keep the hover effect for regular links in the article */
+article {
+    margin-bottom: 20px;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+a {
+    color: #333;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #333;
+    color: #fff;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+/* Ensure images scale to fit within the content area */
+main img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Ensure images are never taller than screen height and are center aligned */
+img {
+    max-height: 80vh;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}

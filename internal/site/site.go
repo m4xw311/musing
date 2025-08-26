@@ -3,10 +3,10 @@ package site
 import (
 	"fmt"
 	"html/template"
+	"io"
 	"os"
 	"path/filepath"
 
-	"github.com/gomarkdown/markdown"
 	"github.com/m4xw311/musing/internal/blog"
 )
 
@@ -24,6 +24,12 @@ func NewStaticSiteGenerator(postsDir, outputDir string) *StaticSiteGenerator {
 	}
 }
 
+// IndexData holds the data for the index page
+type IndexData struct {
+	Posts       []blog.Post
+	LatestPosts []blog.Post
+}
+
 // Generate generates the static site
 func (s *StaticSiteGenerator) Generate() error {
 	// Create output directory
@@ -35,6 +41,16 @@ func (s *StaticSiteGenerator) Generate() error {
 	b := blog.NewBlog(s.PostsDir)
 	if err := b.LoadPosts(); err != nil {
 		return fmt.Errorf("error loading posts: %w", err)
+	}
+
+	// Copy style.css to the output directory
+	if err := s.copyStyleCSS(); err != nil {
+		return fmt.Errorf("error copying style.css: %w", err)
+	}
+
+	// Copy images directory to the output directory
+	if err := s.copyImages(); err != nil {
+		return fmt.Errorf("error copying images: %w", err)
 	}
 
 	// Generate index page
@@ -50,31 +66,110 @@ func (s *StaticSiteGenerator) Generate() error {
 	return nil
 }
 
+// copyStyleCSS copies the style.css file to the output directory
+func (s *StaticSiteGenerator) copyStyleCSS() error {
+	src := "internal/template/style.css"
+	dst := filepath.Join(s.OutputDir, "style.css")
+
+	srcFile, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer srcFile.Close()
+
+	dstFile, err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	defer dstFile.Close()
+
+	_, err = io.Copy(dstFile, srcFile)
+	return err
+}
+
+// copyImages copies the images directory from posts to the output directory
+func (s *StaticSiteGenerator) copyImages() error {
+	src := filepath.Join(s.PostsDir, "images")
+	dst := filepath.Join(s.OutputDir, "images")
+
+	// Check if source directory exists
+	if _, err := os.Stat(src); os.IsNotExist(err) {
+		// No images directory, nothing to copy
+		return nil
+	} else if err != nil {
+		return err
+	}
+
+	// Create destination directory
+	if err := os.MkdirAll(dst, 0755); err != nil {
+		return err
+	}
+
+	// Copy all files in the images directory
+	return filepath.Walk(src, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		// Skip directories
+		if info.IsDir() {
+			return nil
+		}
+
+		// Calculate relative path
+		relPath, err := filepath.Rel(src, path)
+		if err != nil {
+			return err
+		}
+
+		// Create destination file path
+		dstPath := filepath.Join(dst, relPath)
+
+		// Create destination directory if it doesn't exist
+		dstDir := filepath.Dir(dstPath)
+		if err := os.MkdirAll(dstDir, 0755); err != nil {
+			return err
+		}
+
+		// Copy file
+		return s.copyFile(path, dstPath)
+	})
+}
+
+// copyFile copies a file from src to dst
+func (s *StaticSiteGenerator) copyFile(src, dst string) error {
+	srcFile, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer srcFile.Close()
+
+	dstFile, err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	defer dstFile.Close()
+
+	_, err = io.Copy(dstFile, srcFile)
+	return err
+}
+
 // generateIndex creates the index page with a list of all posts
 func (s *StaticSiteGenerator) generateIndex(b *blog.Blog) error {
-	indexTemplate := `<!DOCTYPE html>
-<html>
-<head>
-    <title>My Blog</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-    <header>
-        <h1>My Blog</h1>
-    </header>
-    <main>
-        <h2>Posts</h2>
-        <ul>
-        {{range .Posts}}
-            <li><a href="{{.Slug}}.html">{{.Title}}</a> - {{.CreatedDate.Format "2006-01-02"}}</li>
-        {{end}}
-        </ul>
-    </main>
-</body>
-</html>`
+	// Prepare data for the index page
+	var latestPosts []blog.Post
+	if len(b.Posts) > 4 {
+		latestPosts = b.Posts[:4]
+	} else {
+		latestPosts = b.Posts
+	}
 
-	tmpl, err := template.New("index").Parse(indexTemplate)
+	indexData := IndexData{
+		Posts:       b.Posts,
+		LatestPosts: latestPosts,
+	}
+
+	tmpl, err := template.ParseFiles("internal/template/index.html")
 	if err != nil {
 		return err
 	}
@@ -85,44 +180,17 @@ func (s *StaticSiteGenerator) generateIndex(b *blog.Blog) error {
 	}
 	defer file.Close()
 
-	return tmpl.Execute(file, b)
+	return tmpl.Execute(file, indexData)
 }
 
 // generatePosts creates individual HTML pages for each post
 func (s *StaticSiteGenerator) generatePosts(b *blog.Blog) error {
-	postTemplate := `<!DOCTYPE html>
-<html>
-<head>
-    <title>{{.Title}} - My Blog</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-    <header>
-        <h1><a href="index.html">My Blog</a></h1>
-    </header>
-    <main>
-        <article>
-            <h1>{{.Title}}</h1>
-            <p><em>Published: {{.CreatedDate.Format "2006-01-02"}}</em></p>
-            <div>
-                {{.ContentHTML}}
-            </div>
-        </article>
-    </main>
-</body>
-</html>`
-
-	tmpl, err := template.New("post").Parse(postTemplate)
+	tmpl, err := template.ParseFiles("internal/template/post.html")
 	if err != nil {
 		return err
 	}
 
 	for _, post := range b.Posts {
-		// Convert markdown content to HTML
-		htmlContent := markdown.ToHTML([]byte(post.Content), nil, nil)
-		post.ContentHTML = template.HTML(htmlContent)
-
 		file, err := os.Create(filepath.Join(s.OutputDir, post.Slug+".html"))
 		if err != nil {
 			return err

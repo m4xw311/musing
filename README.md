@@ -2,6 +2,8 @@
 
 A simple tool to publish markdown-based static blogs and sync them to platforms like Substack and Medium.
 
+⚠️ This project is currently in development and not ready for use.
+
 ## Features
 
 1. Publish blog posts written in markdown to a static website

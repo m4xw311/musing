@@ -1,5 +1,6 @@
-CreatedDate: 2025-08-24 23:48:00
-UpdatedDate: 2025-08-24 23:48:00
+---
+CreatedDate: 2025-08-24 23:49:00
+UpdatedDate: 2025-08-24 23:49:00
 Tags: second, blog
 Published: true
 ---
