@@ -3,6 +3,8 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
+    position: relative;
+    min-height: 100vh;
 }
 
 header {
@@ -10,6 +12,7 @@ header {
     color: #fff;
     padding: 10px 0;
     text-align: center;
+    position: relative;
 }
 
 header h1 {
@@ -20,6 +23,25 @@ header h1 {
 header h1 a {
     color: #fff; /* Ensure the header link text is white */
     text-decoration: none;
+}
+
+.feed-link {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+.feed-link a {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.feed-link a:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
 
 main {
@@ -123,4 +145,46 @@ img {
     object-fit: contain;
     display: block;
     margin: 0 auto;
+}
+
+/* MathJax styling */
+.math-inline {
+    display: inline-block;
+}
+
+.math-block {
+    display: block;
+    text-align: center;
+    margin: 1em 0;
+}
+
+/* Prism.js code block styling */
+pre[class*="language-"] {
+    border-radius: 5px;
+    margin: 1em 0;
+    padding: 1em;
+    overflow: auto;
+}
+
+code[class*="language-"] {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+/* Ensure code blocks with math language are properly handled */
+pre[class*="language-math"] {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Style for inline code */
+p code, li code {
+    background-color: #f0f0f0;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    font-size: 0.9em;
 }

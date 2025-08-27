@@ -24,6 +24,7 @@ allowed_commands:
   - go fmt ./...
   - go vet *
   - go mod tidy
+  - go doc *
 
 # Filesystem access rules
 filesystem_access:

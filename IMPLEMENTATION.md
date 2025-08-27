@@ -1,61 +1,126 @@
-# Musings Implementation Outline
+# Musings Implementation Details
 
-This document outlines the basic functional structure of the Musings application based on the requirements.
+This document outlines the detailed functional structure of the Musings application based on the current implementation. It serves as a guide for anyone wanting to contribute to the development of the project.
 
 ## Current Implementation
 
 ### Core Components
 
-1. **Command Line Interface** - Using Cobra framework
-   - `musings publish` - Publish blog posts to static website
-   - `musings sync` - Sync blog posts to external platforms
+#### 1. Command Line Interface
+Using the Cobra framework, the CLI provides two main commands:
 
-2. **Blog Management** - Basic blog post handling
-   - Blog struct to represent blog collection
-   - Post struct to represent individual posts
-   - Loading posts from markdown files
+- `musings publish` - Generates a static website from markdown blog posts
+- `musings sync` - Syncs blog posts to external platforms (currently a placeholder)
 
-3. **Static Site Generation** - Basic static site generator
-   - Processing markdown posts
-   - Generating HTML output
+The CLI entry point is at `cmd/musings/main.go`, with command implementations in the `cmd/musings/cmd/` directory.
 
-4. **Directory Structure**
-   - `posts/` - Directory for markdown blog posts
-   - `public/` - Output directory for generated static site
+#### 2. Blog Management System
+Located in `internal/blog/`, this package handles:
 
-### Files Created
+- **Post Struct**: Represents individual blog posts with fields for title, content, creation/update dates, tags, slug, and publication status
+- **Blog Struct**: Manages a collection of posts
+- **Markdown Parsing**: Converts markdown files to Post structs with:
+  - Frontmatter parsing for metadata (CreatedDate, UpdatedDate, Tags, Published status)
+  - Automatic title extraction from first H1 heading
+  - Slug generation from titles
+  - **Enhanced Markdown to HTML conversion** using the `github.com/gomarkdown/markdown` library with extended features:
+    - Tables
+    - Footnotes
+    - Fenced code blocks
+    - Auto-generated heading IDs
+    - Strikethrough
+    - Definition lists
+    - Math/LaTeX rendering (with MathJax support)
+    - Backslash line breaks
+    - Smart fractions
+  - Content snippet generation for post previews
+  - Automatic addition of missing date fields to markdown files
 
-- `main.go` - Entry point with Cobra CLI setup
-- `blog.go` - Blog and Post data structures
-- `site.go` - Static site generation functionality
-- `publish_cmd.go` - Publish command implementation
-- `sync_cmd.go` - Sync command implementation
-- `README.md` - Documentation
-- `TERRAFORM.md` - Placeholder for Terraform configurations
+#### 3. Static Site Generation
+Located in `internal/site/`, this package handles:
 
-## Future Implementation
+- **HTML Generation**: Creates index and individual post pages using Go templates
+- **Asset Handling**: Copies CSS stylesheets and image assets to the output directory
+- **Feed Generation**: Creates both RSS and Atom feeds for the blog content
+- **Directory Structure**:
+  - `posts/` - Source directory for markdown blog posts
+  - `public/` - Output directory for generated static site
 
-### Static Site Generation
-- Convert markdown to HTML
-- Create proper page templates
-- Generate index page with latest posts
-- Add CSS styling
+#### 4. Template System
+Located in `internal/template/`, includes:
 
-### Cloud Deployment
-- Terraform configurations for:
-  - AWS S3 + CloudFront
-  - Azure Static Web Apps
-  - Google Cloud Storage + CDN
+- `index.html` - Main page showing latest posts and a list of all posts
+- `post.html` - Template for individual blog post pages
+- `style.css` - Styling for the generated site with responsive design
+- Feed templates implemented in code for RSS and Atom formats
+- **MathJax support** for rendering mathematical expressions
+- **Prism.js support** for syntax highlighting of code blocks
 
-### Platform Syncing
-- Substack API integration
-- Medium API integration
-- Configuration management for API keys
+### Code Structure
 
-## Next Steps
+```
+.
+├── cmd/
+│   └── musings/
+│       ├── main.go           # Entry point
+│       └── cmd/              # Command implementations
+│           ├── publish.go
+│           ├── root.go
+│           └── sync.go
+├── internal/
+│   ├── blog/                 # Blog management
+│   │   └── blog.go
+│   ├── site/                 # Static site generation
+│   │   ├── site.go
+│   │   └── feed.go
+│   └── template/             # HTML templates and CSS
+│       ├── index.html
+│       ├── post.html
+│       └── style.css
+├── posts/                    # Source markdown files
+└── public/                   # Generated static site
+```
 
-1. Implement full markdown to HTML conversion
-2. Create attractive HTML templates
-3. Add metadata parsing from markdown files
-4. Implement platform synchronization
-5. Add Terraform configurations
+### Key Features Implemented
+
+1. **Automatic Metadata Handling**:
+   - Parses frontmatter in markdown files for metadata
+   - Automatically adds missing CreatedDate/UpdatedDate fields
+   - Extracts titles from H1 headings if not in frontmatter
+
+2. **Complete Static Site Generation**:
+   - Generates index page with latest posts and full post listing
+   - Creates individual HTML pages for each post
+   - Produces RSS and Atom feeds for syndication
+   - Copies static assets (CSS, images)
+
+3. **Responsive Design**:
+   - Mobile-friendly CSS styling
+   - Card-based layout for latest posts
+   - Proper typography and spacing
+
+4. **Enhanced Markdown Support**:
+   - Extended markdown parsing with support for tables, footnotes, and more
+   - Full markdown parsing to HTML
+   - Math/LaTeX rendering with MathJax
+   - Syntax highlighting with Prism.js
+   - Image handling with proper sizing
+
+## Getting Started for Contributors
+
+1. **Understanding the Data Flow**:
+   - CLI commands initialize Blog and StaticSiteGenerator instances
+   - Blog.LoadPosts() reads and parses markdown files
+   - StaticSiteGenerator.Generate() orchestrates the site creation
+
+2. **Key Implementation Details**:
+   - Frontmatter parsing expects YAML-like format with specific field names
+   - Date formats must follow "YYYY-MM-DD HH:MM:SS"
+   - Slug generation automatically creates URL-friendly identifiers
+   - Markdown parsing now supports extended syntax features including MathJax and Prism.js
+
+3. **Adding New Features**:
+   - New CLI commands should be added in `cmd/musings/cmd/`
+   - Blog-related features go in `internal/blog/`
+   - Site generation enhancements belong in `internal/site/`
+   - Templates can be modified in `internal/template/`

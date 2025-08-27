@@ -1,3 +1,8 @@
+// Package blog provides functionality for managing blog posts.
+//
+// The blog package handles parsing markdown files into Post structs,
+// managing collections of posts, and converting markdown to HTML with
+// extended features like tables, footnotes, and syntax highlighting.
 package blog
 
 import (
@@ -11,9 +16,11 @@ import (
 	"time"
 
 	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/html"
+	"github.com/gomarkdown/markdown/parser"
 )
 
-// Post represents a blog post
+// Post represents a blog post with metadata and content.
 type Post struct {
 	Title              string        // Extracted from the first # Heading
 	Content            string        // Extracted from the markdown file
@@ -27,13 +34,13 @@ type Post struct {
 	Published          bool
 }
 
-// Blog represents a collection of blog posts
+// Blog represents a collection of blog posts.
 type Blog struct {
 	Posts []Post
 	Path  string
 }
 
-// NewBlog creates a new blog instance
+// NewBlog creates a new blog instance with the specified path.
 func NewBlog(path string) *Blog {
 	return &Blog{
 		Posts: make([]Post, 0),
@@ -41,7 +48,9 @@ func NewBlog(path string) *Blog {
 	}
 }
 
-// LoadPosts loads all blog posts from the blog directory
+// LoadPosts loads all blog posts from the blog directory.
+// It reads all markdown files, parses them into Post structs,
+// and sorts them by creation date (newest first).
 func (b *Blog) LoadPosts() error {
 	// Create directory if it doesn't exist
 	if err := os.MkdirAll(b.Path, 0755); err != nil {
@@ -81,7 +90,53 @@ func (b *Blog) LoadPosts() error {
 	return nil
 }
 
-// parsePost parses a markdown file into a Post struct
+// CustomMarkdownParser creates a markdown parser with extended features.
+// It enables various markdown extensions including tables, footnotes,
+// strikethrough, and MathJax support.
+func CustomMarkdownParser() *parser.Parser {
+	// Create markdown parser with extended features
+	// Using all available extensions from gomarkdown for maximum compatibility
+	extensions := parser.CommonExtensions |
+		parser.AutoHeadingIDs |
+		parser.Footnotes |
+		parser.Strikethrough |
+		parser.SpaceHeadings |
+		parser.HeadingIDs |
+		parser.BackslashLineBreak |
+		parser.DefinitionLists |
+		parser.MathJax | parser.SuperSubscript
+
+	// Create the parser with extensions
+	p := parser.NewWithExtensions(extensions)
+	return p
+}
+
+// CustomMarkdownRenderer creates a markdown renderer with extended features.
+func CustomMarkdownRenderer() *html.Renderer {
+	// Create markdown renderer with extended features
+	htmlFlags := html.CommonFlags | html.HrefTargetBlank
+	opts := html.RendererOptions{
+		Flags: htmlFlags,
+	}
+	return html.NewRenderer(opts)
+}
+
+// ConvertMarkdownToHTML converts markdown text to HTML with extended features.
+// It uses the custom parser and renderer with extended markdown support.
+func ConvertMarkdownToHTML(content string) []byte {
+	// Create parser and renderer with extensions
+	parser := CustomMarkdownParser()
+	renderer := CustomMarkdownRenderer()
+
+	// Parse and render the markdown
+	doc := parser.Parse([]byte(content))
+	htmlContent := markdown.Render(doc, renderer)
+
+	return htmlContent
+}
+
+// parsePost parses a markdown file into a Post struct.
+// It extracts frontmatter metadata and converts the content to HTML.
 func parsePost(filePath string) (Post, error) {
 	post := Post{}
 
@@ -215,19 +270,20 @@ func parsePost(filePath string) (Post, error) {
 
 	// Set content
 	post.Content = strings.Join(contentLines, "\n")
-	// Convert markdown content to HTML
-	htmlContent := markdown.ToHTML([]byte(post.Content), nil, nil)
+	// Convert markdown content to HTML with extended features
+	htmlContent := ConvertMarkdownToHTML(post.Content)
 	post.ContentHTML = template.HTML(htmlContent)
 
 	// Generate content snippet
 	post.ContentSnippet = generateContentSnippet(post.Content)
-	// Convert markdown snippet to HTML
-	htmlContentSnippet := markdown.ToHTML([]byte(post.ContentSnippet), nil, nil)
+	// Convert markdown snippet to HTML with extended features
+	htmlContentSnippet := ConvertMarkdownToHTML(post.ContentSnippet)
 	post.ContentSnippetHTML = template.HTML(htmlContentSnippet)
 	return post, nil
 }
 
-// updatePostFile updates the markdown file with missing date fields
+// updatePostFile updates the markdown file with missing date fields.
+// It adds CreatedDate and UpdatedDate fields to the frontmatter if they're missing.
 func updatePostFile(filePath string, rawFrontmatterLines []string, frontmatter map[string]string, contentLines []string, post Post) error {
 	// Create the updated content
 	var updatedContent strings.Builder
@@ -326,7 +382,7 @@ func updatePostFile(filePath string, rawFrontmatterLines []string, frontmatter m
 	return os.WriteFile(filePath, []byte(updatedContent.String()), 0644)
 }
 
-// extractTitleFromContent extracts the first # heading from content lines
+// extractTitleFromContent extracts the first # heading from content lines.
 func extractTitleFromContent(lines []string) string {
 	for _, line := range lines {
 		if strings.HasPrefix(line, "# ") {
@@ -336,7 +392,9 @@ func extractTitleFromContent(lines []string) string {
 	return "Untitled"
 }
 
-// createSlug creates a URL-friendly slug from a title
+// createSlug creates a URL-friendly slug from a title.
+// It converts the title to lowercase, replaces spaces with hyphens,
+// and removes special characters.
 func createSlug(title string) string {
 	// Convert to lowercase
 	slug := strings.ToLower(title)
@@ -354,7 +412,8 @@ func createSlug(title string) string {
 	return slug
 }
 
-// generateContentSnippet generates a short snippet from the content
+// generateContentSnippet generates a short snippet from the content.
+// Currently limits the content to first 150 characters.
 func generateContentSnippet(content string) string {
 	// Remove markdown headers and code blocks
 	//	re := regexp.MustCompile("(?m)^(#.*|```.*|```)

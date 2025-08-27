@@ -1,3 +1,4 @@
+// Package cmd implements the command-line interface for the musings application.
 package cmd
 
 import (
@@ -8,6 +9,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// publishCmd represents the publish command which generates a static website
+// from markdown blog posts.
 var publishCmd = &cobra.Command{
 	Use:   "publish",
 	Short: "Publish blog posts to static website",

@@ -27,6 +27,12 @@ musings publish  # Generate static website from markdown posts
 musings sync     # Sync posts to external platforms
 ```
 
+## Documentation
+
+- [Implementation Details](IMPLEMENTATION.md) - Detailed information about the current implementation
+- [Go Documentation](docs/go-doc-usage.md) - How to use Go documentation with this project
+- [Markdown Extensions](docs/markdown-extensions.md) - Information about supported markdown features
+
 ## Requirements
 
 See [REQUIREMENTS.md](REQUIREMENTS.md) for detailed requirements.

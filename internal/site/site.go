@@ -1,3 +1,8 @@
+// Package site provides functionality for generating static websites from blog posts.
+//
+// The site package handles the generation of static HTML files from markdown blog posts,
+// including creating index pages, individual post pages, and RSS/Atom feeds. It also
+// manages copying assets like CSS files and images to the output directory.
 package site
 
 import (
@@ -10,13 +15,14 @@ import (
 	"github.com/m4xw311/musing/internal/blog"
 )
 
-// StaticSiteGenerator handles generating static HTML from markdown posts
+// StaticSiteGenerator handles generating static HTML from markdown posts.
 type StaticSiteGenerator struct {
 	PostsDir  string
 	OutputDir string
 }
 
-// NewStaticSiteGenerator creates a new static site generator
+// NewStaticSiteGenerator creates a new static site generator with the specified
+// posts directory and output directory.
 func NewStaticSiteGenerator(postsDir, outputDir string) *StaticSiteGenerator {
 	return &StaticSiteGenerator{
 		PostsDir:  postsDir,
@@ -24,13 +30,15 @@ func NewStaticSiteGenerator(postsDir, outputDir string) *StaticSiteGenerator {
 	}
 }
 
-// IndexData holds the data for the index page
+// IndexData holds the data for the index page.
 type IndexData struct {
 	Posts       []blog.Post
 	LatestPosts []blog.Post
 }
 
-// Generate generates the static site
+// Generate generates the complete static site.
+// It creates the output directory, loads blog posts, copies assets,
+// generates the index page, individual post pages, and RSS/Atom feeds.
 func (s *StaticSiteGenerator) Generate() error {
 	// Create output directory
 	if err := os.MkdirAll(s.OutputDir, 0755); err != nil {
@@ -63,10 +71,20 @@ func (s *StaticSiteGenerator) Generate() error {
 		return fmt.Errorf("error generating posts: %w", err)
 	}
 
+	// Generate RSS feed
+	if err := s.generateRSSFeed(b); err != nil {
+		return fmt.Errorf("error generating RSS feed: %w", err)
+	}
+
+	// Generate Atom feed
+	if err := s.generateAtomFeed(b); err != nil {
+		return fmt.Errorf("error generating Atom feed: %w", err)
+	}
+
 	return nil
 }
 
-// copyStyleCSS copies the style.css file to the output directory
+// copyStyleCSS copies the style.css file to the output directory.
 func (s *StaticSiteGenerator) copyStyleCSS() error {
 	src := "internal/template/style.css"
 	dst := filepath.Join(s.OutputDir, "style.css")
@@ -87,7 +105,7 @@ func (s *StaticSiteGenerator) copyStyleCSS() error {
 	return err
 }
 
-// copyImages copies the images directory from posts to the output directory
+// copyImages copies the images directory from posts to the output directory.
 func (s *StaticSiteGenerator) copyImages() error {
 	src := filepath.Join(s.PostsDir, "images")
 	dst := filepath.Join(s.OutputDir, "images")
@@ -136,7 +154,7 @@ func (s *StaticSiteGenerator) copyImages() error {
 	})
 }
 
-// copyFile copies a file from src to dst
+// copyFile copies a file from src to dst.
 func (s *StaticSiteGenerator) copyFile(src, dst string) error {
 	srcFile, err := os.Open(src)
 	if err != nil {
@@ -154,7 +172,7 @@ func (s *StaticSiteGenerator) copyFile(src, dst string) error {
 	return err
 }
 
-// generateIndex creates the index page with a list of all posts
+// generateIndex creates the index page with a list of all posts.
 func (s *StaticSiteGenerator) generateIndex(b *blog.Blog) error {
 	// Prepare data for the index page
 	var latestPosts []blog.Post
@@ -183,7 +201,7 @@ func (s *StaticSiteGenerator) generateIndex(b *blog.Blog) error {
 	return tmpl.Execute(file, indexData)
 }
 
-// generatePosts creates individual HTML pages for each post
+// generatePosts creates individual HTML pages for each post.
 func (s *StaticSiteGenerator) generatePosts(b *blog.Blog) error {
 	tmpl, err := template.ParseFiles("internal/template/post.html")
 	if err != nil {

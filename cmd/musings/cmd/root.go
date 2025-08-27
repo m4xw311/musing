@@ -1,3 +1,7 @@
+// Package cmd implements the command-line interface for the musings application.
+//
+// It provides commands for publishing blog posts to static websites and syncing
+// posts to external platforms.
 package cmd
 
 import (
@@ -11,6 +15,8 @@ var rootCmd = &cobra.Command{
 and publish the same to platforms like substack and medium.`,
 }
 
+// Execute runs the root command and starts the CLI application.
+// It returns an error if the command execution fails.
 func Execute() error {
 	return rootCmd.Execute()
 }
