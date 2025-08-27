@@ -1,7 +1,7 @@
 ---
 Title: Test Post with Markdown Extensions
-CreatedDate: 2023-06-15 10:30:00
-UpdatedDate: 2023-06-15 10:30:00
+CreatedDate: 2025-08-26 21:53:00
+UpdatedDate: 2025-08-26 21:53:00
 Tags: testing, markdown, extensions
 Published: true
 ---

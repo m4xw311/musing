@@ -73,6 +73,7 @@ main {
 
 .card h3 {
     margin-top: 0;
+    font-size: 1.3em;
 }
 
 .card a {
@@ -100,8 +101,25 @@ article {
     margin-bottom: 20px;
 }
 
-h1, h2 {
+article p.meta {
+    color: #666;
+    font-style: italic;
+}
+
+h1, h2, h3 {
     color: #333;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+h2 {
+    font-size: 1.5em;
+}
+
+h3 {
+    font-size: 1.3em;
 }
 
 ul {

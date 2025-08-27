@@ -5,22 +5,47 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="style.css" />
-        <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="rss.xml" />
-        <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="atom.xml" />
+        <link
+            rel="alternate"
+            type="application/rss+xml"
+            title="RSS Feed"
+            href="rss.xml"
+        />
+        <link
+            rel="alternate"
+            type="application/atom+xml"
+            title="Atom Feed"
+            href="atom.xml"
+        />
         
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
+            rel="stylesheet"
+        />
         
         <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script
+            id="MathJax-script"
+            async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+        ></script>
     </head>
     <body>
         <header>
             <h1>My Blog</h1>
             <div class="feed-link">
                 <a href="rss.xml" title="RSS Feed">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#fff">
-                        <circle cx="6.18" cy="17.82" r="2.18"/>
-                        <path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="#fff"
+                    >
+                        <circle cx="6.18" cy="17.82" r="2.18" />
+                        <path
+                            d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"
+                        />
                     </svg>
                 </a>
             </div>
@@ -29,11 +54,29 @@
             <h2>Latest Posts</h2>
             <div class="cards">
                 
+                <a href="test-post-with-markdown-extensions.html">
+                    <div class="card">
+                        <h1>Test Post with Markdown Extensions</h1>
+                        <p><p>This post demonstrates the new markdown extensions supported by the blog engine.</p>
+
+<h2 id="strikethrough">Strikethrough</h2>
+
+<p>This text has <del>strikethrough</del> formatting.</p>
+
+<h2 id="t">T&hellip;</h2>
+</p>
+                        <p>
+                            <em
+                                >Published: 2025-08-26</em
+                            >
+                        </p>
+                    </div>
+                </a>
+                
                 <a href="my-third-blog-post.html">
                     <div class="card">
-                        <p><h1 id="my-third-blog-post">My Third Blog Post</h1>
-
-<p>This is another blog post to demonstrate images in posts.</p>
+                        <h1>My Third Blog Post</h1>
+                        <p><p>This is another blog post to demonstrate images in posts.</p>
 
 <p><img src="images/derivative-ai.png" alt="Image" /></p>
 </p>
@@ -47,13 +90,17 @@
                 
                 <a href="my-second-blog-post.html">
                     <div class="card">
-                        <p><h1 id="my-second-blog-post">My Second Blog Post</h1>
-
-<p>This is another blog post to demonstrate how multiple posts would work.</p>
+                        <h1>My Second Blog Post</h1>
+                        <p><p>This is another blog post to demonstrate how multiple posts would work.</p>
 
 <h2 id="another-subheading">Another Subheading</h2>
 
-<p>Some additional content for our&hellip;</p>
+<p>Some additional content for our blog.</p>
+
+<ol>
+<li>First item
+&hellip;</li>
+</ol>
 </p>
                         <p>
                             <em
@@ -65,13 +112,12 @@
                 
                 <a href="my-first-blog-post.html">
                     <div class="card">
-                        <p><h1 id="my-first-blog-post">My First Blog Post</h1>
-
-<p>This is the content of my first blog post. It&rsquo;s written in markdown format.</p>
+                        <h1>My First Blog Post</h1>
+                        <p><p>This is the content of my first blog post. It&rsquo;s written in markdown format.</p>
 
 <h2 id="subheading">Subheading</h2>
 
-<p>Here&rsquo;s some more content to demonstr&hellip;</p>
+<p>Here&rsquo;s some more content to demonstrate markdown formatti&hellip;</p>
 </p>
                         <p>
                             <em
@@ -81,27 +127,14 @@
                     </div>
                 </a>
                 
-                <a href="test-post-with-markdown-extensions.html">
-                    <div class="card">
-                        <p><h1 id="test-post-with-markdown-extensions">Test Post with Markdown Extensions</h1>
-
-<p>This post demonstrates the new markdown extensions supported by the blog engine.</p>
-
-<h2 id="strikethrough">Strikethrough</h2>
-
-<p>This text ha&hellip;</p>
-</p>
-                        <p>
-                            <em
-                                >Published: 2023-06-15</em
-                            >
-                        </p>
-                    </div>
-                </a>
-                
             </div>
             <h2>All Posts</h2>
             <ul>
+                
+                <li>
+                    <a href="test-post-with-markdown-extensions.html">Test Post with Markdown Extensions</a> -
+                    2025-08-26
+                </li>
                 
                 <li>
                     <a href="my-third-blog-post.html">My Third Blog Post</a> -
@@ -116,11 +149,6 @@
                 <li>
                     <a href="my-first-blog-post.html">My First Blog Post</a> -
                     2025-08-24
-                </li>
-                
-                <li>
-                    <a href="test-post-with-markdown-extensions.html">Test Post with Markdown Extensions</a> -
-                    2023-06-15
                 </li>
                 
             </ul>

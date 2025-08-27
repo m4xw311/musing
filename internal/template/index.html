@@ -5,22 +5,47 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="style.css" />
-        <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="rss.xml" />
-        <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="atom.xml" />
+        <link
+            rel="alternate"
+            type="application/rss+xml"
+            title="RSS Feed"
+            href="rss.xml"
+        />
+        <link
+            rel="alternate"
+            type="application/atom+xml"
+            title="Atom Feed"
+            href="atom.xml"
+        />
         <!-- Prism.js for syntax highlighting -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
+            rel="stylesheet"
+        />
         <!-- MathJax configuration for LaTeX support -->
         <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <script
+            id="MathJax-script"
+            async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+        ></script>
     </head>
     <body>
         <header>
             <h1>My Blog</h1>
             <div class="feed-link">
                 <a href="rss.xml" title="RSS Feed">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#fff">
-                        <circle cx="6.18" cy="17.82" r="2.18"/>
-                        <path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="#fff"
+                    >
+                        <circle cx="6.18" cy="17.82" r="2.18" />
+                        <path
+                            d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"
+                        />
                     </svg>
                 </a>
             </div>
@@ -31,6 +56,7 @@
                 {{range .LatestPosts}}
                 <a href="{{.Slug}}.html">
                     <div class="card">
+                        <h1>{{.Title}}</h1>
                         <p>{{.ContentSnippetHTML}}</p>
                         <p>
                             <em

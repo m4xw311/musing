@@ -14,6 +14,7 @@ import (
 	"sort"
 	"strings"
 	"time"
+	"unicode"
 
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/html"
@@ -32,6 +33,7 @@ type Post struct {
 	Slug               string        // Derived from title
 	Tags               []string
 	Published          bool
+	ReadingTime        int // Estimated reading time in minutes
 }
 
 // Blog represents a collection of blog posts.
@@ -135,6 +137,56 @@ func ConvertMarkdownToHTML(content string) []byte {
 	return htmlContent
 }
 
+// removeFirstHeading removes the first # heading from the content.
+func removeFirstHeading(contentLines []string) []string {
+	if len(contentLines) == 0 {
+		return contentLines
+	}
+
+	// Find and remove the first line that starts with "# "
+	for i, line := range contentLines {
+		if strings.HasPrefix(line, "# ") {
+			// Remove this line and return the rest
+			return append(contentLines[:i], contentLines[i+1:]...)
+		}
+	}
+
+	// If no heading found, return original content
+	return contentLines
+}
+
+// calculateReadingTime estimates reading time based on word count.
+// Assumes average reading speed of 200 words per minute.
+func calculateReadingTime(content string) int {
+	// Count words in the content
+	words := 0
+	inWord := false
+
+	for _, r := range content {
+		if unicode.IsSpace(r) {
+			if inWord {
+				words++
+				inWord = false
+			}
+		} else if !inWord {
+			inWord = true
+		}
+	}
+
+	// Count the last word if content doesn't end with space
+	if inWord {
+		words++
+	}
+
+	// Calculate reading time (assuming 200 words per minute)
+	readingTime := words / 200
+	if readingTime == 0 && words > 0 {
+		readingTime = 1 // Minimum 1 minute for any content
+	}
+
+	return readingTime
+}
+
 // parsePost parses a markdown file into a Post struct.
 // It extracts frontmatter metadata and converts the content to HTML.
 func parsePost(filePath string) (Post, error) {
@@ -219,6 +271,9 @@ func parsePost(filePath string) (Post, error) {
 	// Extract title from first # heading in content
 	post.Title = extractTitleFromContent(contentLines)
 
+	// Remove the first heading from content to avoid duplication in the template
+	contentLines = removeFirstHeading(contentLines)
+
 	if createdStr, ok := frontmatter["CreatedDate"]; ok {
 		if created, err := time.Parse("2006-01-02 15:04:05", createdStr); err == nil {
 			post.CreatedDate = created
@@ -270,6 +325,10 @@ func parsePost(filePath string) (Post, error) {
 
 	// Set content
 	post.Content = strings.Join(contentLines, "\n")
+
+	// Calculate reading time
+	post.ReadingTime = calculateReadingTime(post.Content)
+
 	// Convert markdown content to HTML with extended features
 	htmlContent := ConvertMarkdownToHTML(post.Content)
 	post.ContentHTML = template.HTML(htmlContent)
