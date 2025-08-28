@@ -55,15 +55,15 @@
 - [ ] 7.4 Add support for custom domain settings
 - [ ] 7.5 Implement build environment detection
 
-## Cloud Infrastructure (Terraform)
+## Cloud Infrastructure
 
-### 8. AWS Infrastructure
-- [ ] 8.1 Implement Terraform configurations for AWS S3 hosting
-- [ ] 8.2 Add CloudFront CDN integration
+### 8. AWS Infrastructure (AWS CDK)
+- [x] 8.1 Implement AWS CDK configurations for AWS S3 hosting
+- [x] 8.2 Add CloudFront CDN integration
 - [ ] 8.3 Implement Route53 DNS configuration
 - [ ] 8.4 Add SSL certificate management
-- [ ] 8.5 Implement deployment pipelines
-- [ ] 8.6 Add monitoring and logging
+- [x] 8.5 Implement deployment pipelines
+- [x] 8.6 Add monitoring and logging
 
 ### 9. Azure Infrastructure
 - [ ] 9.1 Implement Terraform configurations for Azure Static Web Apps

@@ -1,0 +1,20 @@
+# AWS CDK
+cdk.out/
+node_modules/
+*.js
+*.d.ts
+*.js.map
+tsconfig.json
+package-lock.json
+yarn.lock
+
+# IDE
+.vscode/
+.idea/
+
+# Test
+coverage/
+*.test.ts
+
+# Logs
+*.log

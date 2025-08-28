@@ -25,6 +25,8 @@ allowed_commands:
   - go vet *
   - go mod tidy
   - go doc *
+  - npm install *
+  - cdk synth
 
 # Filesystem access rules
 filesystem_access:

@@ -56,6 +56,18 @@ Located in `internal/template/`, includes:
 - **MathJax support** for rendering mathematical expressions
 - **Prism.js support** for syntax highlighting of code blocks
 
+### AWS Infrastructure (Newly Implemented)
+
+Located in `infrastructure/aws-cdk/`, this package handles:
+
+- **AWS CDK Infrastructure** for deploying the static site to AWS
+- **S3 Bucket** for hosting static website files
+- **CloudFront CDN** for global content delivery
+- **Deployment Pipeline** for CI/CD using AWS CodePipeline
+- **Monitoring and Alerting** with CloudWatch alarms
+- **HTTPS Support** with ACM certificates
+- **Custom Domain Support** with Route53 DNS integration
+
 ### Code Structure
 
 ```
@@ -77,6 +89,15 @@ Located in `internal/template/`, includes:
 │       ├── index.html
 │       ├── post.html
 │       └── style.css
+├── infrastructure/
+│   └── aws-cdk/              # AWS CDK infrastructure code
+│       ├── bin/
+│       ├── lib/
+│       ├── test/
+│       ├── package.json
+│       ├── cdk.json
+│       ├── tsconfig.json
+│       └── README.md
 ├── posts/                    # Source markdown files
 └── public/                   # Generated static site
 ```
@@ -106,6 +127,13 @@ Located in `internal/template/`, includes:
    - Syntax highlighting with Prism.js
    - Image handling with proper sizing
 
+5. **AWS Infrastructure**:
+   - Infrastructure-as-code using AWS CDK
+   - S3 hosting with CloudFront CDN
+   - CI/CD pipeline with GitHub integration
+   - Monitoring and alerting with CloudWatch
+   - HTTPS support with ACM certificates
+
 ## Getting Started for Contributors
 
 1. **Understanding the Data Flow**:
@@ -124,3 +152,9 @@ Located in `internal/template/`, includes:
    - Blog-related features go in `internal/blog/`
    - Site generation enhancements belong in `internal/site/`
    - Templates can be modified in `internal/template/`
+   - Infrastructure enhancements belong in `infrastructure/aws-cdk/`
+
+4. **AWS Deployment**:
+   - Requires AWS credentials configured via `aws configure`
+   - Deploy with `cdk deploy` from the `infrastructure/aws-cdk` directory
+   - Supports custom domains with automatic DNS and SSL configuration
